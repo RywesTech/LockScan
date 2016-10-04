@@ -1,10 +1,10 @@
 /*
-|-------------FPS Side-------------|-------------CAT5 Cable Side-------------|
- |Pin 1: TX (black wire)            |                                         |
- |Pin 2: RX (first white wire)      |                                         |
- |Pin 3: Ground (second white wire) |                                         |
- |Pin 4: 5V (third white wire)      |                                         |
- |----------------------------------|-----------------------------------------|
+ |----------- FPS Wiring -----------|
+ |Pin 1: TX (black wire)            |
+ |Pin 2: RX (first white wire)      |
+ |Pin 3: Ground (second white wire) |
+ |Pin 4: 5V (third white wire)      |
+ |----------------------------------|
 
  Version 1.0: Created by Ryan Westcott, January 12th 2015
  Version 2.0: Created by Ryan Westcott, September 26th 2016
@@ -96,7 +96,7 @@ void loop() {
     if (id < 200) {
 
       if (id == 0) {
-        open();
+        success();
       }
 
       // add the option for other fingers to be scanned here
@@ -117,12 +117,13 @@ void loop() {
       delay(30);
     }
   }
-
 }
 
-void open() { // What to do to open the lock:
+void success() { // What to do to open the lock:
   lockServo.write(unlocked);
-  for (int i = 0; i < NUMPIXELS; i++) {
+  doorServo.write(doorPosOpen);
+  tone(buzzer,800,500);
+  for (int i = 0; i < NUMPIXELS/2+1; i++) {
 
     pixels.setPixelColor(i, pixels.Color(0, 4, 0));
     pixels.setPixelColor(NUMPIXELS - i, pixels.Color(0, 4, 0));
@@ -143,7 +144,10 @@ void open() { // What to do to open the lock:
 }
 
 void fail() {
-  for (int i = 0; i < NUMPIXELS; i++) {
+  lockServo.write(unlocked);
+  doorServo.write(doorPosClosed);
+  tone(buzzer, 100,700);
+  for (int i = 0; i < NUMPIXELS/2+1; i++) {
 
     pixels.setPixelColor(i, pixels.Color(4, 0, 0));
     pixels.setPixelColor(NUMPIXELS - i, pixels.Color(4, 0, 0));
